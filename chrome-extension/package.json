@@ -1,0 +1,22 @@
+{
+  "name": "js-feature-flags",
+  "version": "1.0.0",
+  "description": "",
+  "main": "featureFlags.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliotstocker/JS-Feature-Flags.git"
+  },
+  "author": "RTObjects",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eliotstocker/JS-Feature-Flags/issues"
+  },
+  "homepage": "https://github.com/eliotstocker/JS-Feature-Flags#readme",
+  "dependencies": {
+    "rivets": "^0.9.6"
+  }
+}

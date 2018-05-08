@@ -1,0 +1,103 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+}
+.hidden {
+  display: none;
+}
+.disabled {
+  text-align: center;
+  padding: 30px;
+}
+.topbar {
+  background: #f3f3f3;
+  border-bottom: 1px solid #CCC;
+}
+.topbar h1 {
+  padding: 8px;
+  margin: 0;
+  font-size: 18px;
+  display: inline-block;
+}
+.topbar .small {
+  font-size: 10px;
+  line-height: 16px;
+  color: #999;
+}
+.topbar .divider {
+  width: 1px;
+  background: #999999;
+  height: 31px;
+  display: inline-block;
+  margin-bottom: -10px;
+}
+.topbar button {
+  float: right;
+}
+.flagsTable {
+  padding: 8px;
+}
+.flagsTable .row {
+  font-size: 0;
+  border-bottom: 1px solid #eeeeee;
+}
+.flagsTable .row .flagDescription {
+  width: calc(100% - 50px);
+  display: inline-block;
+  font-size: 10px;
+}
+.flagsTable .row .flagDescription h3 {
+  font-size: 15px;
+  margin: 0;
+}
+.flagsTable .row .flagDescription h5 {
+  font-size: 8px;
+  color: #999999;
+  margin: 0;
+}
+.flagsTable .row .flagToggle {
+  width: 50px;
+  display: inline-block;
+}
+.toggle-label {
+  position: relative;
+  display: block;
+  height: 20px;
+  width: 44px;
+  background: #898989;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.toggle-label:after {
+  position: absolute;
+  left: -2px;
+  top: -3px;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 100px;
+  background: #fff;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.1);
+  content: '';
+  transition: all 0.3s ease;
+}
+.toggle-label:active:after {
+  transform: scale(1.15, 0.85);
+}
+input.toggle:checked ~ label {
+  background: #c0d2f0;
+}
+input.toggle:checked ~ label:after {
+  left: 20px;
+  background: #457ad2;
+}
+input.toggle:disabled ~ label {
+  background: #d5d5d5;
+  pointer-events: none;
+}
+input.toggle:disabled ~ label:after {
+  background: #bcbdbc;
+}
+/*# sourceMappingURL=panel.css.map */

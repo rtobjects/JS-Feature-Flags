@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="cc49a5ed-b0dd-4e5a-9be3-8d38fffb1f84" name="API Server" url="http://api.rtobjects.com">
+        <fileTransfer host="api.rtobjects.com" port="22" privateKey="$USER_HOME$/.ssh/rto" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

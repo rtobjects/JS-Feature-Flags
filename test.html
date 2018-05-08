@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Feature Flags Test</title>
+        <script src="http://features.rtobjects.com/ghw7s-js78sgs-jhss78/flags.js"></script>
+    </head>
+    <body>
+        <h1>Testing</h1>
+
+        <div id="test-1">
+            <h3>Test Flag 1:</h3>
+            Value: <span class="val"></span>
+        </div>
+        <div id="test-2">
+            <h3>Test Flag 2:</h3>
+            Value: <span class="val"></span>
+        </div>
+        <div id="test-3">
+            <h3>Test Flag 3:</h3>
+            Value: <span class="val"></span>
+        </div>
+
+        <script>
+          rtoFeatureFlags.addEventListener('ready', function (e) {
+            document.querySelector('#test-1 .val').innerText = rtoFeatureFlags.getFlag('test-flag') ? 'true' : 'false';
+            document.querySelector('#test-2 .val').innerText = rtoFeatureFlags.getFlag('test-flag-2') ? 'true' : 'false';
+            document.querySelector('#test-3 .val').innerText = rtoFeatureFlags.getFlag('flag-test-3') ? 'true' : 'false';
+
+            rtoFeatureFlags.addEventListener('change:test-flag', function (e) {
+              document.querySelector('#test-1 .val').innerText = e.detail.newValue ? 'true' : 'false';
+            });
+            rtoFeatureFlags.addEventListener('change:test-flag-2', function (e) {
+              document.querySelector('#test-2 .val').innerText = e.detail.newValue ? 'true' : 'false';
+            });
+            rtoFeatureFlags.addEventListener('change:flag-test-3', function (e) {
+              document.querySelector('#test-3 .val').innerText = e.detail.newValue ? 'true' : 'false';
+            });
+          });
+        </script>
+    </body>
+</html>

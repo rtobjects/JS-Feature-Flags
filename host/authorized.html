@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+      function parseArgs() {
+        var opts = {};
+        var data = window.location.hash.replace('#', '').replace('?', '').split('&');
+        for(var i = 0; i < data.length; i++) {
+          var kv = data[i].split('=');
+          opts[kv[0]] = kv[1] == 'true' ? true : (kv[1] == 'false' ? false : kv[1]);
+        }
+        return opts;
+      }
+
+      function getToken() {
+        var args = parseArgs();
+        if(args['token']) {
+          return args['token'];
+        }
+        throw new Error('no access token was provided');
+      }
+    </script>
+</body>
+</html>

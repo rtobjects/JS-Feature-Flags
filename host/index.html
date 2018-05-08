@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feature Flag Application Manager</title>
+    <script src="node_modules/rivets/dist/rivets.bundled.min.js"></script>
+    <script src="node_modules/nanoajax/nanoajax.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css"/>
+</head>
+<body>
+    <div class="topbar">
+        <h1>Feature Flag Application Manager</h1>
+    </div>
+    <div class="sidebar">
+        <h3>Applications</h3>
+        <ul>
+            <li rv-each-app="applications"><a rv-href="app.id | prepend '#'">{app.name}<br><span class="id">{app.id}</span></a></li>
+        </ul>
+    </div>
+    <div class="main pane">
+        <div class="appinfo">
+            <h3>App Info</h3>
+            <div class="material-input-group">
+                <input type="text" required rv-value="application.name">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Name</label>
+            </div>
+            <div class="material-input-group">
+                <input type="text" required rv-value="application.id" disabled>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>ID</label>
+            </div>
+        </div>
+        <div class="flags">
+            <div class="row" rv-each-flag="application.flags">
+                <div class="flagDescription">
+                    <h3>{flag.name}</h3>
+                    <h5>{flag.id}</h5>
+                    <p>{flag.description}</p>
+                </div>
+                <div class="flagToggle">
+                    <input type="checkbox" rv-id="flag.id" class="toggle hidden" rv-checked="flag.default" rv-on-change="flagUpdate"/>
+                    <label rv-for="flag.id" class="toggle-label"></label>
+                </div>
+            </div>
+        </div>
+        <div class="fab addflag">
+            +
+        </div>
+        <div class="modal new-flag hidden">
+            <h3>New Flag for: {application.name}</h3>
+            <div class="material-input-group">
+                <input type="text" required class="name" minlength="2" maxlength="32">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Name</label>
+            </div>
+            <div class="material-input-group">
+                <input type="text" required class="description" minlength="5">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Description</label>
+            </div>
+            <div class="material-input-group">
+                <input type="text" required class="id" minlength="5" maxlength="32">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>ID</label>
+            </div>
+            <div class="error" rv-show="UpdateError">{UpdateError}</div>
+            <button class="md-btn md-btn-raised md-btn-ripple md-save">Add +</button>
+            <button class="md-btn md-btn-raised md-btn-ripple md-back">Cancel</button>
+        </div>
+    </div>
+    <script src="ui.js"></script>
+</body>
+</html>
