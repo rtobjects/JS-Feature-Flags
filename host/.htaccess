@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteRule ^rest/apps$ api.php?list=$1 [L]
+RewriteRule ^rest/apps/$ api.php?list=$1 [L]
+RewriteRule ^rest/apps/([^/]*)$ /api.php?app=$1 [L]
+RewriteRule ^rest/apps/([^/]*)/$ /api.php?app=$1 [L]
+RewriteRule ^([^/]*)/flags\.js$ /generateJavaScript.php?id=$1 [L]

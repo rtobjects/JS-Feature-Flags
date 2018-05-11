@@ -10,28 +10,61 @@
 </head>
 <body>
     <div class="topbar">
-        <h1>Feature Flag Application Manager</h1>
+        <h1>Feature Flagging System | Manager</h1>
     </div>
     <div class="sidebar">
         <h3>Applications</h3>
         <ul>
             <li rv-each-app="applications"><a rv-href="app.id | prepend '#'">{app.name}<br><span class="id">{app.id}</span></a></li>
         </ul>
+        <div class="addapp" rv-on-click="methods.newAppDialog">
+            + New App
+        </div>
     </div>
-    <div class="main pane">
+    <div class="pane info" rv-hide="application.id">
+        <h1>Welcome to RTO Feature Flagging System</h1>
+
+        <p>
+            In the left hand side you may select or create an Application for implementing feature flags into your
+            web application, for developer documentation on implementing tags etc. <a href="/documentation/">read the docs here.</a>
+        </p>
+    </div>
+    <div class="main pane" rv-show="application.id">
         <div class="appinfo">
-            <h3>App Info</h3>
-            <div class="material-input-group">
-                <input type="text" required rv-value="application.name">
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>Name</label>
+            <div class="column">
+                <h3>App Info</h3>
+                <div class="material-input-group">
+                    <input type="text" required rv-value="application.name" rv-on-change="methods.appUpdate" minlength="2" maxlength="32">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Name</label>
+                </div>
+                <div class="material-input-group">
+                    <input type="text" required rv-value="application.id" disabled>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>ID</label>
+                </div>
             </div>
-            <div class="material-input-group">
-                <input type="text" required rv-value="application.id" disabled>
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>ID</label>
+            <div class="column">
+                <h3>Allowed Domains</h3>
+                <div class="material-input-group" rv-each-domain="application.domains">
+                    <input type="text" class="domain-input" required rv-value="domain" rv-on-change="methods.domainUpdate" minlength="2" maxlength="64">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Domain</label>
+                </div>
+                <div class="adddomain" rv-on-click="methods.newDomain">
+                    + add new domain
+                </div>
+            </div>
+            <div class="column">
+                <h3>Usage</h3>
+                Add the following into the head of each page you wish to access flags:
+                <div class="code">
+                    <span class="tag">&lt;script</span> <span class="attribute">src=</span><span class="value">&quot;//{{domain}}/{application.id}/flags.js&quot;</span><span class="tag">&gt;&lt;/script&gt</span>
+                </div>
+                Follow integration documents <a href="/documentation">here</a>
             </div>
         </div>
         <div class="flags">
@@ -42,38 +75,61 @@
                     <p>{flag.description}</p>
                 </div>
                 <div class="flagToggle">
-                    <input type="checkbox" rv-id="flag.id" class="toggle hidden" rv-checked="flag.default" rv-on-change="flagUpdate"/>
+                    <input type="checkbox" rv-id="flag.id" class="toggle hidden" rv-checked="flag.default" rv-on-change="methods.appUpdate"/>
                     <label rv-for="flag.id" class="toggle-label"></label>
                 </div>
             </div>
         </div>
-        <div class="fab addflag">
+        <div class="fab addflag" rv-on-click="methods.newFlagDialog">
             +
         </div>
-        <div class="modal new-flag hidden">
-            <h3>New Flag for: {application.name}</h3>
-            <div class="material-input-group">
-                <input type="text" required class="name" minlength="2" maxlength="32">
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>Name</label>
-            </div>
-            <div class="material-input-group">
-                <input type="text" required class="description" minlength="5">
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>Description</label>
-            </div>
-            <div class="material-input-group">
-                <input type="text" required class="id" minlength="5" maxlength="32">
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>ID</label>
-            </div>
-            <div class="error" rv-show="UpdateError">{UpdateError}</div>
-            <button class="md-btn md-btn-raised md-btn-ripple md-save">Add +</button>
-            <button class="md-btn md-btn-raised md-btn-ripple md-back">Cancel</button>
+    </div>
+    <div class="footer">
+        FFS is a tool created by <a href="http://rtobjects.com" target="_blank">RTO</a>
+    </div>
+    <div class="modal new-flag hidden">
+        <h3>New Flag for: {application.name}</h3>
+        <div class="material-input-group">
+            <input type="text" required class="name" minlength="2" maxlength="32">
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Name</label>
         </div>
+        <div class="material-input-group">
+            <input type="text" required class="description" minlength="5">
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Description</label>
+        </div>
+        <div class="material-input-group">
+            <input type="text" required class="id" minlength="5" maxlength="32">
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>ID</label>
+        </div>
+        <p class="error" rv-show="UpdateError">{UpdateError}</p>
+        <button class="md-btn md-btn-raised md-btn-ripple md-save" rv-on-click="methods.saveFlag">Add +</button>
+        <button class="md-btn md-btn-raised md-btn-ripple md-back" rv-on-click="methods.closeDialog">Cancel</button>
+    </div>
+    <div class="modal new-app hidden">
+        <h3>New Application</h3>
+        <div class="material-input-group">
+            <input type="text" required class="name" minlength="2" maxlength="32">
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Name</label>
+        </div>
+        <div class="material-input-group">
+            <input type="text" required class="domain" minlength="2" maxlength="64">
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Domain</label>
+        </div>
+        <p class="info">Domain should be just the fully qualified domain without protocol or path.<br>
+            You can add more domains after creation.</p>
+        <p class="error" rv-show="UpdateError">{UpdateError}</p>
+        <button class="md-btn md-btn-raised md-btn-ripple md-save" rv-on-click="methods.saveApp">Add +</button>
+        <button class="md-btn md-btn-raised md-btn-ripple md-back" rv-on-click="methods.closeDialog">Cancel</button>
     </div>
     <script src="ui.js"></script>
 </body>

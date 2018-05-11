@@ -18,8 +18,11 @@
 
       function getToken() {
         var args = parseArgs();
-        if(args['token']) {
-          return args['token'];
+        if(args['token'] && args['expires_in']) {
+          return {
+            token: args['token'],
+            expires: new Date().getTime() + (parseInt(args['expires_in']) * 1000)
+          };
         }
         throw new Error('no access token was provided');
       }

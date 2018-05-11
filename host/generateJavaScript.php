@@ -1,8 +1,8 @@
 <?php
 
 const libraryNameSpace = "rtoFeatureFlags";
-const storage = 'appData.json';
-const cacheTime = 100; //seconds
+const storage = '../appData.json';
+const cacheTime = 30; //seconds
 $data = array();
 getData();
 
@@ -60,6 +60,8 @@ function getFinalOutput($id) {
 }
 
 header("Content-Type: application/javascript");
+header("Cache-Control: no-cache, must-revalidate"); //HTTP 1.1
+header("Pragma: no-cache"); //HTTP 1.0
 header("Expires: Sat, 26 Jul 2020 05:00:00 GMT" . date("D, d M Y H:i:s e", time() + cacheTime));
 
 try {

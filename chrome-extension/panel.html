@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html>
+    <head>
+        <script src="node_modules/rivets/dist/rivets.bundled.min.js"></script>
+        <link href="styles/panel.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <div class="topbar">
+            <h1>RTO Feature Flags</h1>
+            <div class="divider" rv-show="application.id"></div>
+            <h1 rv-show="application.id"> {application.name} <span class="small">({application.id})</span></h1>
+            <button id="reset">Reset All to Defaults</button>
+        </div>
+        <div class="disabled">
+            <p>Feature Flags is not available for the loaded tab, please check your site config and try again</p>
+            <button>Go to the Feature Flags website to find out more</button>
+        </div>
+        <div class="flagsTable hidden">
+            <div class="row" rv-each-flag="flags">
+                <div class="flagDescription">
+                    <h3>{flag.name}</h3>
+                    <h5>{flag.id}</h5>
+                    <p>{flag.description}</p>
+                </div>
+                <div class="flagToggle">
+                    <input type="checkbox" rv-id="flag.id" class="toggle hidden" rv-checked="flag.default" rv-on-change="onChange"/>
+                    <label rv-for="flag.id" class="toggle-label"></label>
+                </div>
+            </div>
+        </div>
+        <script src="panel.js"></script>
+    </body>
 </html>

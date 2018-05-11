@@ -5,7 +5,7 @@
       <paths name="API Server">
         <serverdata>
           <mappings>
-            <mapping deploy="/www/flags.rtobjects.com/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/www/flags.rtobjects.com/" local="$PROJECT_DIR$" web="" />
           </mappings>
         </serverdata>
       </paths>

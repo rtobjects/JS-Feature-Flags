@@ -1,180 +1,184 @@
-window['__es_featureFlags'] = {
+var __rto_featureFlags = {
   _extensionReady: function(version, localData) {
-    window['__es_featureFlags']._extensionConnected = true;
-    window['__es_featureFlags']._extensionVersion = version;
-    window['__es_featureFlags']._setupLocalFlags(localData);
-    window['__es_featureFlags']._sendDataToExtension("setup", window['__es_featureFlags']._availableFlags);
+    __rto_featureFlags._extensionConnected = true;
+    __rto_featureFlags._extensionVersion = version;
+    __rto_featureFlags._setupLocalFlags(localData);
+    __rto_featureFlags._sendDataToExtension('setup', {'flags': __rto_featureFlags._availableFlags, 'application': __rto_featureFlags['application']});
   },
   _setupLocalFlags: function(localData) {
     for(var key in localData) {
-      for(var i = 0; i < this._availableFlags.length; i++) {
-        if(key === this._availableFlags[i].id) {
-          this._availableFlags[i].default = localData[key];
+      for(var i = 0; i < __rto_featureFlags._availableFlags.length; i++) {
+        if(key === __rto_featureFlags._availableFlags[i].id) {
+          __rto_featureFlags._availableFlags[i].default = localData[key];
         }
       }
     }
   },
   _valueUpdated: function(data) {
-    for(var i = 0; i < this._availableFlags.length; i++) {
-      if(data.id === this._availableFlags[i].id) {
-        this._sendEvent('change', data.id, new CustomEvent('change', {'detail': {
-          'flag': data.id,
-          'newValue': data.value,
-          'oldValue': this._availableFlags[i].default,
+    for(var i = 0; i < __rto_featureFlags._availableFlags.length; i++) {
+      if(data.id === __rto_featureFlags._availableFlags[i]['id']) {
+        __rto_featureFlags._sendEvent('change', data.id, new CustomEvent('change', {'detail': {
+          'flag': data['id'],
+          'newValue': data['value'],
+          'oldValue': __rto_featureFlags._availableFlags[i]['default'],
           'timestamp': new Date().getTime()
         }}));
-        this._availableFlags[i].default = data.value;
+        __rto_featureFlags._availableFlags[i]['default'] = data['value'];
         break;
       }
     }
   },
   _sendEvent: function(type, flag, evt) {
     var i;
-    if(this._listeners.flag[flag] && this._listeners.flag[flag][type]) {
-      for(i = 0; i < this._listeners.flag[flag][type].length; i++) {
-        this._listeners.flag[flag][type][i](evt);
+    if(__rto_featureFlags._listeners.flag[flag] && __rto_featureFlags._listeners.flag[flag][type]) {
+      for(i = 0; i < __rto_featureFlags._listeners.flag[flag][type].length; i++) {
+        __rto_featureFlags._listeners.flag[flag][type][i](evt);
       }
     }
-    if(this._listeners.generic[type]) {
-      for(i = 0; i < this._listeners.generic[type].length; i++) {
-        this._listeners.generic[type][i]();
+    if(__rto_featureFlags._listeners.generic[type]) {
+      for(i = 0; i < __rto_featureFlags._listeners.generic[type].length; i++) {
+        __rto_featureFlags._listeners.generic[type][i]();
       }
     }
   },
   _resetValues: function() {
-    for(var i = 0; i < this._availableFlags.length; i++) {
-      for(var j = 0; j < this.flags.length; j++) {
-        if(this.flags[j].id === this._availableFlags[i].id &&
-          this.flags[j].default !== this._availableFlags[i].default) {
-          this._sendEvent('change', this.flags[j].id, new CustomEvent('change', {'detail': {
-              'flag': this.flags[j].id,
-              'newValue': this.flags[j].default,
-              'oldValue': this._availableFlags[i].default,
+    for(var i = 0; i < __rto_featureFlags._availableFlags.length; i++) {
+      for(var j = 0; j < __rto_featureFlags['flags'].length; j++) {
+        if(__rto_featureFlags['flags'][j]['id'] === __rto_featureFlags._availableFlags[i]['id'] &&
+          __rto_featureFlags['flags'][j]['default'] !== __rto_featureFlags._availableFlags[i]['default']) {
+          __rto_featureFlags._sendEvent('change', __rto_featureFlags['flags'][j].id, new CustomEvent('change', {'detail': {
+              'flag': __rto_featureFlags['flags'][j]['id'],
+              'newValue': __rto_featureFlags['flags'][j]['default'],
+              'oldValue': __rto_featureFlags._availableFlags[i]['default'],
               'timestamp': new Date().getTime()
             }}));
-          this._availableFlags[i].default = this.flags[j].default;
+          __rto_featureFlags._availableFlags[i]['default'] = __rto_featureFlags['flags'][j]['default'];
         }
       }
     }
-    window['__es_featureFlags']._sendDataToExtension("setup", window['__es_featureFlags']._availableFlags);
+    __rto_featureFlags._sendDataToExtension('setup', {'flags': __rto_featureFlags._availableFlags, 'application': __rto_featureFlags['application']});
   },
   _listeners: {
     generic: {},
     flag: {}
   },
-  version: '0.0.1',
+  'version': '0.0.1',
   _extensionConnected: false,
   _extensionVersion: null,
-  isReady: false,
+  'isReady': false,
   _availableFlags: [],
   _sendDataToExtension: function(action, data) {
-    window.postMessage({ type: "__ES_FEATUREFLAGS_APP", action: action, payload: data }, "*");
+    window.postMessage({'type': '__ES_FEATUREFLAGS_APP', 'action': action, 'payload': data}, '*');
   },
-  addEventListener: function(type, eventCallback) {
+  'addEventListener': function(type, eventCallback) {
     if(type.indexOf(':') > -1) {
       var parts = type.split(':');
       type = parts[0];
       var flag = parts[1];
-      if(!this._listeners.flag[flag]) {
-        this._listeners.flag[flag] = {};
+      if(!__rto_featureFlags._listeners.flag[flag]) {
+        __rto_featureFlags._listeners.flag[flag] = {};
       }
-      if(!this._listeners.flag[flag][type]) {
-        this._listeners.flag[flag][type] = [];
+      if(!__rto_featureFlags._listeners.flag[flag][type]) {
+        __rto_featureFlags._listeners.flag[flag][type] = [];
       }
-      this._listeners.flag[flag][type].push(eventCallback);
+      __rto_featureFlags._listeners.flag[flag][type].push(eventCallback);
     } else {
-      if(!this._listeners.generic[type]) {
-        this._listeners.generic[type] = [];
+      if(!__rto_featureFlags._listeners.generic[type]) {
+        __rto_featureFlags._listeners.generic[type] = [];
       }
-      this._listeners.generic[type].push(eventCallback);
+      __rto_featureFlags._listeners.generic[type].push(eventCallback);
     }
   },
-  removeEventListener: function(type, eventCallback) {
+  'removeEventListener': function(type, eventCallback) {
     if(type.indexOf(':')) {
       var parts = type.split(':');
       type = parts[0];
       var flag = parts[1];
-      if(!this._listeners.flag[flag]) {
-        this._listeners.flag[flag] = {};
+      if(!__rto_featureFlags._listeners.flag[flag]) {
+        __rto_featureFlags._listeners.flag[flag] = {};
       }
-      if(!this._listeners.flag[flag][type]) {
-        this._listeners.flag[flag][type] = [];
+      if(!__rto_featureFlags._listeners.flag[flag][type]) {
+        __rto_featureFlags._listeners.flag[flag][type] = [];
       }
       var remove = -1;
-      for(var i = 0; i < this._listeners.flag[flag][type].length; i++) {
-        if(this._listeners.flag[flag][type].toString() === eventCallback.toString()) {
+      for(var i = 0; i < __rto_featureFlags._listeners.flag[flag][type].length; i++) {
+        if(__rto_featureFlags._listeners.flag[flag][type].toString() === eventCallback.toString()) {
           remove = i;
           break;
         }
       }
       if(remove > -1) {
-        this._listeners.flag[flag][type].splice(remove, 1);
+        __rto_featureFlags._listeners.flag[flag][type].splice(remove, 1);
       }
     } else {
-      if(!this._listeners.generic[type]) {
-        this._listeners.generic[type] = {};
+      if(!__rto_featureFlags._listeners.generic[type]) {
+        __rto_featureFlags._listeners.generic[type] = {};
       }
       var remove = -1;
-      for(var i = 0; i < this._listeners.generic[type].length; i++) {
-        if(this._listeners.generic[type].toString() === eventCallback.toString()) {
+      for(var i = 0; i < __rto_featureFlags._listeners.generic[type].length; i++) {
+        if(__rto_featureFlags._listeners.generic[type].toString() === eventCallback.toString()) {
           remove = i;
           break;
         }
       }
       if(remove > -1) {
-        this._listeners.generic[type].splice(remove, 1);
+        __rto_featureFlags._listeners.generic[type].splice(remove, 1);
       }
     }
   },
-  getFlag(id) {
-    if(!window['__es_featureFlags'].isReady)
-      throw new Error("Feature flags is not yet in the ready state, please listen for the 'ready' event");
-    for(var i = 0; i < this._availableFlags.length; i++) {
-      if(id === this._availableFlags[i].id) {
-        return this._availableFlags[i].default;
+  'getFlag': function(id) {
+    if(!__rto_featureFlags.isReady)
+      throw new Error('Feature flags is not yet in the ready state, please listen for the \'ready\' event');
+    for(var i = 0; i < __rto_featureFlags._availableFlags.length; i++) {
+      if(id === __rto_featureFlags._availableFlags[i].id) {
+        return __rto_featureFlags._availableFlags[i].default;
       }
     }
     throw new Error('No flag with id: ' + id + ' was found, have you set it up in the flags console');
   },
-  initialize: function() {
-    window.addEventListener("message", function(event) {
-      if (event.source != window)
+  'initialize': function() {
+    if(__rto_featureFlags['application']['domains'].indexOf(window.location.hostname) < 0) {
+      console.warn('Feature Flags Application: \'' + __rto_featureFlags['application']['name']
+        + '\' is not enabled for domain: \'' + window.location.hostname + '\'');
+      return;
+    }
+    window.addEventListener('message', function(event) {
+      if (event.source !== window)
         return;
-      if (event.data.type && (event.data.type == "__ES_FEATUREFLAGS_EXTENSION")) {
+      if (event.data.type && (event.data.type === '__ES_FEATUREFLAGS_EXTENSION')) {
         switch(event.data.status) {
-          case "ready":
-            window['__es_featureFlags']._extensionReady(event.data.version, event.data.local);
+          case 'ready':
+            __rto_featureFlags._extensionReady(event['data']['version'], event['data']['local']);
             break;
-          case "update":
-            window['__es_featureFlags']._valueUpdated(event.data.payload);
+          case 'update':
+            __rto_featureFlags._valueUpdated(event['data']['payload']);
             break;
-          case "reset":
-            window['__es_featureFlags']._resetValues();
+          case 'reset':
+            __rto_featureFlags._resetValues();
             break;
         }
       }
     });
 
-    window['__es_featureFlags']._availableFlags = JSON.parse(JSON.stringify(window['__es_featureFlags'].flags));
-    console.log(window['__es_featureFlags']._availableFlags);
-    window['__es_featureFlags']._sendDataToExtension("ready", {version: window['__es_featureFlags'].version});
+    __rto_featureFlags._availableFlags = JSON.parse(JSON.stringify(__rto_featureFlags['flags']));
+    __rto_featureFlags._sendDataToExtension('ready', {'version': __rto_featureFlags.version, 'application': __rto_featureFlags['application']});
 
     if(document.readyState === 'complete') {
       setTimeout(function () {
-        window['__es_featureFlags'].isReady = true;
-        if (window['__es_featureFlags']._listeners.generic['ready']) {
-          for(var i = 0; i < window['__es_featureFlags']._listeners.generic['ready'].length; i++) {
-            window['__es_featureFlags']._listeners.generic['ready'][i](new Event('ready'));
+        __rto_featureFlags.isReady = true;
+        if (__rto_featureFlags._listeners.generic['ready']) {
+          for(var i = 0; i < __rto_featureFlags._listeners.generic['ready'].length; i++) {
+            __rto_featureFlags._listeners.generic['ready'][i](new Event('ready'));
           }
         }
       }, 60);
     } else {
       window.onload = function() {
         setTimeout(function () {
-          window['__es_featureFlags'].isReady = true;
-          if (window['__es_featureFlags']._listeners.generic['ready']) {
-            for(var i = 0; i < window['__es_featureFlags']._listeners.generic['ready'].length; i++) {
-              window['__es_featureFlags']._listeners.generic['ready'][i](new Event('ready'));
+          __rto_featureFlags.isReady = true;
+          if (__rto_featureFlags._listeners.generic['ready']) {
+            for(var i = 0; i < __rto_featureFlags._listeners.generic['ready'].length; i++) {
+              __rto_featureFlags._listeners.generic['ready'][i](new Event('ready'));
             }
           }
         }, 60);
@@ -183,21 +187,4 @@ window['__es_featureFlags'] = {
   }
 };
 
-window['__es_featureFlags'].flags = [
-  {
-    id: 'test-flag',
-    type: 'bool',
-    name: 'Test Flag',
-    description: 'Flag Description text goes here, it will most likely be a little long, but not too long',
-    default: false
-  },
-  {
-    id: 'test-flag-2',
-    type: 'bool',
-    name: 'Test Flag 2',
-    description: 'This one doesn\'t have such a long description',
-    default: true
-  }
-];
-
-window['__es_featureFlags'].initialize();
+window['rtoFeatureFlags'] = __rto_featureFlags;
